@@ -20,17 +20,17 @@ public:
     ~MainWindow();
     BarCode *barcode;
 private slots:
-    void check_serial_port();
-    void serialport_recv();
+    //void check_serial_port();
+    //void serialport_recv();
 
-    void on_open_port_Button_clicked();
+    //void on_open_port_Button_clicked();
 
     void on_print_button_clicked();
-    void plotPic(QPrinter *printer);
+    //void plotPic(QPrinter *printer);
 
-    void on_rencode_lineEdit_2_textChanged(const QString &arg1);
+    //void on_rencode_lineEdit_2_textChanged(const QString &arg1);
 
-    void on_checkBox_clicked(bool checked);
+    //void on_checkBox_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;

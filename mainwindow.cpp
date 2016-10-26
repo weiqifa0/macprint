@@ -275,18 +275,18 @@ void MainWindow::port_param_init()
 {
 
 }
-void MainWindow::check_serial_port()
-{
-    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-        QStringList list;
-        list << info.portName()
-             << info.description()
-             << info.manufacturer()
-             << info.systemLocation()
-             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString())
-             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : QString());
-    }
-}
+//void MainWindow::check_serial_port()
+//{
+//    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
+//        QStringList list;
+//        list << info.portName()
+//             << info.description()
+//             << info.manufacturer()
+//             << info.systemLocation()
+//             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString())
+//             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : QString());
+//    }
+//}
 void MainWindow::FrameParse(char c)
 {
     switch (state) {
@@ -350,26 +350,26 @@ void MainWindow::FrameParse(char c)
     }
 
 }
-void MainWindow::serialport_recv()
-{
-    QByteArray temp = this->serialport->readAll();
-    if(temp.size() > 0)
-    {
-        for(int i = 0;i< temp.size();i++)
-        {
-            FrameParse(temp.at(i));
-        }
-    }
-}
+//void MainWindow::serialport_recv()
+//{
+//    QByteArray temp = this->serialport->readAll();
+//    if(temp.size() > 0)
+//    {
+//        for(int i = 0;i< temp.size();i++)
+//        {
+//            FrameParse(temp.at(i));
+//        }
+//    }
+//}
 
 void MainWindow::close_serialport()
 {
         this->serialport->close();
 }
-void MainWindow::on_open_port_Button_clicked()
-{
+//void MainWindow::on_open_port_Button_clicked()
+//{
 
-}
+//}
 void MainWindow::log_output(QString info)
 {
     QString time= QDateTime::currentDateTime ().toString ("yyyy-MM-dd hh:mm:ss");
