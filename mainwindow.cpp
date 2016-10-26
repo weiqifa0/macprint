@@ -58,24 +58,10 @@ void MainWindow::InitForm()
    {
         qDebug()<<"open file failure";
    }
-   if(ui->checkBox->isChecked())
-   {
-       ui->rencode_lineEdit_2->setVisible(true);
-       ui->rencode_view_2->setVisible(true);
-   }
-   else
-   {
-       ui->rencode_lineEdit_2->setVisible(false);
-       ui->rencode_view_2->setVisible(false);
-   }
-   ui->groupBox_2->setVisible(false);//隐藏串口设置控件
 }
 //显示条形码
 void MainWindow::QBarcode_ts102(QByteArray &text)
 {
-    ui->rencode_lineEdit->setText(text);
-    if (this->rencode_text.trimmed().isEmpty())
-        return;
     QImage barcodeImage(ui->rencode_view->size(), QImage::Format_ARGB32);
     barcodeImage.fill(QColor(255, 255, 255, 0));
     QPainter painter(&barcodeImage);
@@ -91,7 +77,6 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
     QPen pen;
     QFont font;
     int margin = 1;//设置图像的页边距大小
-    ui->rencode_lineEdit->setText(text);
     this->foreground = QColor("black");
     this->background = QColor("white");
 
@@ -152,7 +137,6 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,QByteArray &text_2)
 {
     int margin = D_MARGIN_VALUE;//设置图像的页边距大小
-    ui->rencode_lineEdit->setText(text);
     this->foreground = QColor("black");
     this->background = QColor("white");
     QPen pen;
@@ -259,7 +243,6 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
 void MainWindow::QRcode_Encode(QByteArray &text)
 {
     int margin = D_MARGIN_VALUE;
-    ui->rencode_lineEdit->setText(text);
     this->foreground = QColor("black");
     this->background = QColor("white");
     QRcode *qrcode = QRcode_encodeString(text.data(), 1, QR_ECLEVEL_L, QR_MODE_8, 1);
@@ -290,51 +273,10 @@ void MainWindow::QRcode_Encode(QByteArray &text)
 }
 void MainWindow::port_param_init()
 {
-    //init com buadrate
-    ui->buadrate_comboBox->addItem(QLatin1String("300"));
-    ui->buadrate_comboBox->addItem(QLatin1String("600"));
-    ui->buadrate_comboBox->addItem(QLatin1String("1200"));
-    ui->buadrate_comboBox->addItem(QLatin1String("2400"));
-    ui->buadrate_comboBox->addItem(QLatin1String("4800"));
-    ui->buadrate_comboBox->addItem(QLatin1String("9600"));
-    ui->buadrate_comboBox->addItem(QLatin1String("19200"));
-    ui->buadrate_comboBox->addItem(QLatin1String("38400"));
-    ui->buadrate_comboBox->addItem(QLatin1String("115200"));
-    ui->buadrate_comboBox->setCurrentIndex(8);
 
-    // fill data bits
-    ui->databits_comboBox->addItem(QLatin1String("5"), QSerialPort::Data5);
-    ui->databits_comboBox->addItem(QLatin1String("6"), QSerialPort::Data6);
-    ui->databits_comboBox->addItem(QLatin1String("7"), QSerialPort::Data7);
-    ui->databits_comboBox->addItem(QLatin1String("8"), QSerialPort::Data8);
-    ui->databits_comboBox->setCurrentIndex(3);
-
-     // fill parity
-    ui->parity_comboBox->addItem(QLatin1String("None"), QSerialPort::NoParity);
-    ui->parity_comboBox->addItem(QLatin1String("Even"), QSerialPort::EvenParity);
-    ui->parity_comboBox->addItem(QLatin1String("Odd"), QSerialPort::OddParity);
-    ui->parity_comboBox->addItem(QLatin1String("Mark"), QSerialPort::MarkParity);
-    ui->parity_comboBox->addItem(QLatin1String("Space"), QSerialPort::SpaceParity);
-
-    // fill stop bits
-    ui->stopbits_comboBox->addItem(QLatin1String("1"), QSerialPort::OneStop);
-#ifdef Q_OS_WIN
-    ui->stopbits_comboBox->addItem(QLatin1String("1.5"), QSerialPort::OneAndHalfStop);
-#endif
-    ui->stopbits_comboBox->addItem(QLatin1String("2"), QSerialPort::TwoStop);
-
-   check_serial_port();
-
-
-  this->serialport = new QSerialPort(this);
-  QObject::connect(this->serialport,SIGNAL(readyRead()),this,SLOT(serialport_recv()));
-
-
-  QObject::connect(ui->check_port_Button,SIGNAL(clicked()),this,SLOT(check_serial_port()));
 }
 void MainWindow::check_serial_port()
 {
-    ui->port_comboBox->clear();
     foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
         QStringList list;
         list << info.portName()
@@ -343,8 +285,6 @@ void MainWindow::check_serial_port()
              << info.systemLocation()
              << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString())
              << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : QString());
-
-        ui->port_comboBox->addItem(list.first(), list);
     }
 }
 void MainWindow::FrameParse(char c)
@@ -361,7 +301,7 @@ void MainWindow::FrameParse(char c)
     case 1:
         if(c=='#')
         {
-            if(ui->checkBox->isChecked())
+            if(true)
             {
                 static unsigned char dcount=0;
                 if(dcount==0)
@@ -422,48 +362,13 @@ void MainWindow::serialport_recv()
     }
 }
 
-void MainWindow::open_serialport()
-{
-
-        QString portName = ui->port_comboBox->currentText();
-        qint32 baudRate = ui->buadrate_comboBox->currentText().toInt();
-        QSerialPort::DataBits dataBits = static_cast<QSerialPort::DataBits>(ui->databits_comboBox->itemData(ui->databits_comboBox->currentIndex()).toInt());
-        QSerialPort::StopBits stopBits = static_cast<QSerialPort::StopBits>(ui->stopbits_comboBox->itemData(ui->stopbits_comboBox->currentIndex()).toInt());
-        QSerialPort::Parity parity = static_cast<QSerialPort::Parity>(ui->parity_comboBox->itemData(ui->parity_comboBox->currentIndex()).toInt());
-        this->serialport->setPortName(portName);
-        this->serialport->setBaudRate(baudRate);
-        this->serialport->setDataBits(dataBits);
-        this->serialport->setStopBits(stopBits);
-        this->serialport->setParity(parity);
-        this->serialport->open(QIODevice::ReadWrite);
-        ui->port_comboBox->setEnabled(false);
-        ui->parity_comboBox->setEnabled(false);
-        ui->stopbits_comboBox->setEnabled(false);
-        ui->databits_comboBox->setEnabled(false);
-        ui->buadrate_comboBox->setEnabled(false);
-
-
-}
 void MainWindow::close_serialport()
 {
         this->serialport->close();
-        ui->port_comboBox->setEnabled(true);
-        ui->parity_comboBox->setEnabled(true);
-        ui->stopbits_comboBox->setEnabled(true);
-        ui->databits_comboBox->setEnabled(true);
-        ui->buadrate_comboBox->setEnabled(true);
 }
 void MainWindow::on_open_port_Button_clicked()
 {
-    if(ui->open_port_Button->text()=="打开")
-     {
-        open_serialport();
-        ui->open_port_Button->setText(tr("关闭"));
-     }else
-     {
-        close_serialport();
-        ui->open_port_Button->setText(tr("打开"));
-    }
+
 }
 void MainWindow::log_output(QString info)
 {
@@ -472,10 +377,7 @@ void MainWindow::log_output(QString info)
 }
 
 
-void MainWindow::plotPic(QPrinter *printer)
-{
-    log_output("开始打印...");
-}
+
 //函 数 名：HexToAsc()
 //功能描述：把16进制转换为ASCII
 char MainWindow::IntToStr(char aChar)
@@ -595,13 +497,8 @@ void MainWindow::on_print_button_clicked()
    //readCmdMac.append(iValue);
    bool ok;
    macValue=sValue.toLong(&ok,16);
-   qDebug()<<macValue;
-   qDebug("%x\r\n",macValue);
-   int imacStep=ui->textEdit_2->toPlainText().toInt();
-   qDebug()<<imacStep;
-   int imacCount=ui->textEdit_3->toPlainText().toInt();
-   qDebug()<<imacCount;
    //return;
+   int imacCount;
 for(int imac=0;imac<imacCount;imac++)
 {
     //第一次数据##########################################
@@ -609,13 +506,12 @@ for(int imac=0;imac<imacCount;imac++)
     qDebug()<<QString::number(macValue,16).toUpper();
     readCmdMac.append(QString::number(macValue,16).toUpper().toLatin1());
     qDebug()<<readCmdMac;
-
-    ui->rencode_lineEdit->setText(readCmdMac);
     this->rencode_text=readCmdMac;
     //在PC界面显示二维码
     QRcode_Encode(this->rencode_text);
     log_output(tr("-->1:")+readCmdMac);
     ui->print_button->setText("再次读取一次，并打印");
+    int imacStep;
     macValue+=imacStep;
     //第二次数据##########################################
     readCmdMac="DD54";
@@ -648,18 +544,6 @@ for(int imac=0;imac<imacCount;imac++)
     QPrintDialog dlg(&printer,this);
     QPainter painter;
 
-    if(ui->checkBox->isChecked())
-    {
-        prinCount++;
-        log_output(tr("[两张]打印第 ")+QString::number(prinCount)+tr(" 次"));
-        QPcode_2(&printer,&painter,this->rencode_text,this->rencode_text_2);
-    }
-    else
-    {
-        prinCount++;
-        log_output(tr("[单张]打印第 ")+QString::number(prinCount)+tr(" 次"));
-        QPcode(&printer,&painter,this->rencode_text);
-    }
 }
 }
 //二维码显示
@@ -689,30 +573,10 @@ void MainWindow::QRcode_Encode_2(QByteArray &text)
                 point ++;
             }
         }
-        ui->rencode_view_2->setPixmap(pixmap);
         painter.end();
         point = NULL;
         QRcode_free(qrcode);
     }
 }
 
-void MainWindow::on_rencode_lineEdit_2_textChanged(const QString &arg1)
-{
-    //QRcode_Encode_2();
-}
 
-void MainWindow::on_checkBox_clicked(bool checked)
-{
-    if(checked)
-    {
-        log_output("打印两张...");
-        ui->rencode_lineEdit_2->setVisible(true);
-        ui->rencode_view_2->setVisible(true);
-    }
-    else
-    {
-        log_output("打印单张...");
-        ui->rencode_lineEdit_2->setVisible(false);
-        ui->rencode_view_2->setVisible(false);
-    }
-}
