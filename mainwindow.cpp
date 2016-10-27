@@ -13,6 +13,7 @@
 #include <QProcess>
 #include <QString>
 
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -52,25 +53,24 @@ void MainWindow::InitForm()
 
    //设置调试窗口的字体大小
    ui->plainTextEdit->setFont(QFont( "宋体" , 10 ,  QFont::Normal) );
-   log_output(tr("启动..."));
    QFile file("macAdress.txt");
    if(!file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
    {
         qDebug()<<"open file failure";
    }
 }
-//显示条形码
-void MainWindow::QBarcode_ts102(QByteArray &text)
-{
-    QImage barcodeImage(ui->rencode_view->size(), QImage::Format_ARGB32);
-    barcodeImage.fill(QColor(255, 255, 255, 0));
-    QPainter painter(&barcodeImage);
-    barcode->setBarcodeType((BarCode::BarcodeTypes)60);
-    barcode->setValue(this->rencode_text);
-    barcode->drawBarcode(&painter, 0, 0, barcodeImage.width(), barcodeImage.height());
-    painter.end();
-    ui->rencode_view->setPixmap(QPixmap::fromImage(barcodeImage));
-}
+////显示条形码
+//void MainWindow::QBarcode_ts102(QByteArray &text)
+//{
+//    QImage barcodeImage(ui->rencode_view->size(), QImage::Format_ARGB32);
+//    barcodeImage.fill(QColor(255, 255, 255, 0));
+//    QPainter painter(&barcodeImage);
+//    barcode->setBarcodeType((BarCode::BarcodeTypes)60);
+//    barcode->setValue(this->rencode_text);
+//    barcode->drawBarcode(&painter, 0, 0, barcodeImage.width(), barcodeImage.height());
+//    painter.end();
+//    ui->rencode_view->setPixmap(QPixmap::fromImage(barcodeImage));
+//}
 
 void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 {
@@ -245,6 +245,7 @@ void MainWindow::QRcode_Encode(QByteArray &text)
     int margin = D_MARGIN_VALUE;
     this->foreground = QColor("black");
     this->background = QColor("white");
+    ui->rencode_lineEdit_2->setText(text);
     QRcode *qrcode = QRcode_encodeString(text.data(), 1, QR_ECLEVEL_L, QR_MODE_8, 1);
     if(NULL != qrcode) {
         QPixmap pixmap(IMAGE_SIZE,IMAGE_SIZE);//ui->rencode_view->width(), ui->rencode_view->height());
@@ -536,7 +537,7 @@ for(int imac=0;imac<imacCount;imac++)
     QString printerName = printer.printerName();
     if(printerName.size()==0)
     {
-        log_output("请连接打印机!!!!!");
+//        log_output("请连接打印机!!!!!");
         return;
     }
     QPrintDialog *dialog = new QPrintDialog(&printer);
@@ -578,5 +579,48 @@ void MainWindow::QRcode_Encode_2(QByteArray &text)
         QRcode_free(qrcode);
     }
 }
+int crc16_compute(int * p_data, int size, const int * p_crc)
+{
+    int i;
+    int crc = (p_crc == NULL) ? 0xffff : *p_crc;
+
+    for (i = 0; i < size; i++)
+    {
+        crc  = (unsigned char)(crc >> 8) | (crc << 8);
+        crc ^= p_data[i];
+        crc ^= (unsigned char)(crc & 0xff) >> 4;
+        crc ^= (crc << 8) << 4;
+        crc ^= ((crc & 0xff) << 4) << 1;
+    }
+
+    return crc;
+}
 
 
+void MainWindow::on_textEdit_textChanged()
+{
+//    qDebug()<<ui->textEdit->toPlainText();
+//    qDebug()<<ui->textEdit->toPlainText().length();
+    QByteArray mactext = ui->textEdit->toPlainText().toLatin1();
+    QRcode_Encode(mactext);//显示二维码
+}
+
+void MainWindow::on_plainTextEdit_textChanged()
+{
+    qDebug()<<"text:"+ui->plainTextEdit->toPlainText();
+    //qDebug()<<"length:"+ui->plainTextEdit->toPlainText().length();
+    qDebug("length: %d",ui->plainTextEdit->toPlainText().length());
+    QByteArray mactext = ui->plainTextEdit->toPlainText().toLatin1();
+    qDebug()<<"Qbyte:"+mactext;
+    bool ok;
+    int macValueInt=mactext.toInt(&ok,16);
+    qDebug("int:%x",macValueInt);//<<"wei..."+macValueInt;
+    quint16 crcChars = qChecksum(mactext, strlen(mactext));
+    qDebug("crc1:%d",crcChars);
+    ui->textEdit->setText(QString::number(crcChars, 10));
+//    int a[2]={0xdd5423,0xdd3454};
+
+//    int crcResult = crc16_compute(a,sizeof(a),NULL);
+//    qDebug()<<"crc"+crcResult;
+
+}

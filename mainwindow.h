@@ -32,6 +32,10 @@ private slots:
 
     //void on_checkBox_clicked(bool checked);
 
+    void on_textEdit_textChanged();
+
+    void on_plainTextEdit_textChanged();
+
 private:
     Ui::MainWindow *ui;
 
@@ -59,7 +63,7 @@ private:
     QSerialPort *serialport;
     #define PAPER_WIDTH 32
     #define PAPER_HIGHT 15
-    #define IMAGE_SIZE 200 //定义在上位机显示二维码大小
+    #define IMAGE_SIZE 400 //定义在上位机显示二维码大小
     /***************************************
      * 设置viewsize windonwsize
      * ************************************/
@@ -98,7 +102,7 @@ private:
 
     #define READ_MAC_CMD "nrfjprog.exe --memrd 0x100000a3 --n 7"
     #define RESET_CMD "nrfjprog.exe -f NRF52 --reset"
-    #define EXE_NAME "缇铭科技量产工具V1.1"
+    #define EXE_NAME "发货打包扫码打印工具V1.0"
     #define CMD_OFFSIZE 4
 };
 
