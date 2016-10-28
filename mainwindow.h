@@ -36,6 +36,10 @@ private slots:
 
     void on_plainTextEdit_textChanged();
 
+    void on_radioButton_2_clicked();
+
+    void on_radioButton_clicked();
+
 private:
     Ui::MainWindow *ui;
 
@@ -63,7 +67,7 @@ private:
     QSerialPort *serialport;
     #define PAPER_WIDTH 32
     #define PAPER_HIGHT 15
-    #define IMAGE_SIZE 400 //定义在上位机显示二维码大小
+    #define IMAGE_SIZE 350 //定义在上位机显示二维码大小
     /***************************************
      * 设置viewsize windonwsize
      * ************************************/

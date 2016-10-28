@@ -99,7 +99,28 @@
                 <property name="spacing">
                  <number>2</number>
                 </property>
-                <item row="1" column="1" colspan="2">
+                <item row="0" column="1">
+                 <widget class="QLabel" name="label">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="font">
+                   <font>
+                    <family>微软雅黑</family>
+                    <pointsize>24</pointsize>
+                    <weight>75</weight>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>请扫描20次</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1" colspan="2">
                  <widget class="QTextEdit" name="textEdit">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -130,10 +151,10 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
-                <item row="4" column="1" colspan="2">
+                <item row="5" column="1" colspan="2">
                  <widget class="QPlainTextEdit" name="plainTextEdit">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="font">
                    <font>
@@ -143,25 +164,36 @@ p, li { white-space: pre-wrap; }
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="1">
-                 <widget class="QLabel" name="label">
+                <item row="1" column="1">
+                 <widget class="QGroupBox" name="groupBox_2">
                   <property name="sizePolicy">
                    <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
-                  <property name="font">
-                   <font>
-                    <family>微软雅黑</family>
-                    <pointsize>24</pointsize>
-                    <weight>75</weight>
-                    <bold>true</bold>
-                   </font>
+                  <property name="title">
+                   <string/>
                   </property>
-                  <property name="text">
-                   <string>请扫描20次</string>
-                  </property>
+                  <layout class="QHBoxLayout" name="horizontalLayout_3">
+                   <item>
+                    <widget class="QRadioButton" name="radioButton_2">
+                     <property name="text">
+                      <string>20个一箱</string>
+                     </property>
+                     <property name="checked">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QRadioButton" name="radioButton">
+                     <property name="text">
+                      <string>50个一箱</string>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                </layout>

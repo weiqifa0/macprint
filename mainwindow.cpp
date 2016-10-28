@@ -13,7 +13,8 @@
 #include <QProcess>
 #include <QString>
 
-
+int intCount=0;
+int intBoxCount=20;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -53,25 +54,8 @@ void MainWindow::InitForm()
 
    //设置调试窗口的字体大小
    ui->plainTextEdit->setFont(QFont( "宋体" , 10 ,  QFont::Normal) );
-   QFile file("macAdress.txt");
-   if(!file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
-   {
-        qDebug()<<"open file failure";
-   }
-}
-////显示条形码
-//void MainWindow::QBarcode_ts102(QByteArray &text)
-//{
-//    QImage barcodeImage(ui->rencode_view->size(), QImage::Format_ARGB32);
-//    barcodeImage.fill(QColor(255, 255, 255, 0));
-//    QPainter painter(&barcodeImage);
-//    barcode->setBarcodeType((BarCode::BarcodeTypes)60);
-//    barcode->setValue(this->rencode_text);
-//    barcode->drawBarcode(&painter, 0, 0, barcodeImage.width(), barcodeImage.height());
-//    painter.end();
-//    ui->rencode_view->setPixmap(QPixmap::fromImage(barcodeImage));
-//}
 
+}
 void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 {
     QPen pen;
@@ -276,18 +260,7 @@ void MainWindow::port_param_init()
 {
 
 }
-//void MainWindow::check_serial_port()
-//{
-//    foreach (const QSerialPortInfo &info, QSerialPortInfo::availablePorts()) {
-//        QStringList list;
-//        list << info.portName()
-//             << info.description()
-//             << info.manufacturer()
-//             << info.systemLocation()
-//             << (info.vendorIdentifier() ? QString::number(info.vendorIdentifier(), 16) : QString())
-//             << (info.productIdentifier() ? QString::number(info.productIdentifier(), 16) : QString());
-//    }
-//}
+
 void MainWindow::FrameParse(char c)
 {
     switch (state) {
@@ -351,139 +324,16 @@ void MainWindow::FrameParse(char c)
     }
 
 }
-//void MainWindow::serialport_recv()
-//{
-//    QByteArray temp = this->serialport->readAll();
-//    if(temp.size() > 0)
-//    {
-//        for(int i = 0;i< temp.size();i++)
-//        {
-//            FrameParse(temp.at(i));
-//        }
-//    }
-//}
 
 void MainWindow::close_serialport()
 {
         this->serialport->close();
 }
-//void MainWindow::on_open_port_Button_clicked()
-//{
 
-//}
 void MainWindow::log_output(QString info)
 {
     QString time= QDateTime::currentDateTime ().toString ("yyyy-MM-dd hh:mm:ss");
     ui->plainTextEdit->appendPlainText(tr("[%1]\r\n%2").arg(time).arg (info));
-}
-
-
-
-//函 数 名：HexToAsc()
-//功能描述：把16进制转换为ASCII
-char MainWindow::IntToStr(char aChar)
-{
-    char ss;
-    printf("%s %d\n",__FUNCTION__,aChar);
-    switch(aChar)
-    {
-        case 0: ss= '0';break;
-        case 1: ss= '1';break;
-        case 2: ss= '2';break;
-        case 3: ss= '3';break;
-        case 4: ss= '4';break;
-        case 5: ss= '5';break;
-        case 6: ss= '6';break;
-        case 7: ss= '7';break;
-        case 8: ss= '8';break;
-        case 9: ss= '9';break;
-
-        case 10: ss= 'A';break;
-        case 11: ss= 'B';break;
-        case 12: ss= 'C';break;
-        case 13: ss= 'D';break;
-        case 14: ss= 'E';break;
-        case 15: ss= 'F';break;
-        default:break;
-    }
-    printf("%s %c\n",__FUNCTION__,ss);
-    return ss;
-}
-//函 数 名：StrToInt()
-//功能描述：把字符转换成对应的数字，比如a转换成10
-char MainWindow::StrToInt(char aChar)
-{
-    char ss;
-    printf("%s %c\n",__FUNCTION__,aChar);
-    switch(aChar)
-    {
-        case '0': ss= 0;break;
-        case '1': ss= 1;break;
-        case '2': ss= 2;break;
-        case '3': ss= 3;break;
-        case '4': ss= 4;break;
-        case '5': ss= 5;break;
-        case '6': ss= 6;break;
-        case '7': ss= 7;break;
-        case '8': ss= 8;break;
-        case '9': ss= 9;break;
-
-        case 'A': ss= 10;break;
-        case 'B': ss= 11;break;
-        case 'C': ss= 12;break;
-        case 'D': ss= 13;break;
-        case 'E': ss= 14;break;
-        case 'F': ss= 15;break;
-        default:break;
-    }
-    printf("%s %d\n",__FUNCTION__,ss);
-    return ss;
-}
-//函 数 名：HexToAsc()
-//功能描述：把16进制转换为ASCII
-char IntToStr(unsigned char aChar){
-    char ss;
-    switch(aChar)
-    {
-        case 0: ss= '0';break;
-        case 1: ss= '1';break;
-        case 2: ss= '2';break;
-        case 3: ss= '3';break;
-        case 4: ss= '4';break;
-        case 5: ss= '5';break;
-        case 6: ss= '6';break;
-        case 7: ss= '7';break;
-        case 8: ss= '8';break;
-        case 9: ss= '9';break;
-
-        case 10: ss= 'A';break;
-        case 11: ss= 'B';break;
-        case 12: ss= 'C';break;
-        case 13: ss= 'D';break;
-        case 14: ss= 'E';break;
-        case 15: ss= 'F';break;
-        default:break;
-    }
-    //printf("%c\n",ss);
-    return ss;
-}
-//char *str=(char*)malloc(4*2);
-char * HexToString(char *str,unsigned char Hex[],unsigned char lenth)
-{
-    unsigned char i=0,j=0;
-    unsigned char tema,temp;
-    //char *str=(char*)malloc(lenth*2);
-    for(i=0;i<lenth;i++)
-    {
-        tema=(Hex[i]>>4)&0x0F;
-        str[j]=IntToStr(tema);
-        j++;
-        temp=Hex[i]&0x0F;
-        str[j]=IntToStr(temp);
-        j++;
-    }
-    str[j]='\0';
-    return str;
 }
 
 void MainWindow::on_print_button_clicked()
@@ -579,75 +429,87 @@ void MainWindow::QRcode_Encode_2(QByteArray &text)
         QRcode_free(qrcode);
     }
 }
-
+QString stringArrayMacName;
 void MainWindow::on_textEdit_textChanged()
 {
-//    qDebug()<<ui->textEdit->toPlainText();
-//    qDebug()<<ui->textEdit->toPlainText().length();
-
-      QByteArray mactext = ui->textEdit->toPlainText().toLatin1();
-      QString StringMacText=ui->textEdit->toPlainText();
-      if(StringMacText.length()==12)
+    QString StringMacText=ui->textEdit->toPlainText();
+    qDebug()<<"StringMacText:"+StringMacText;
+    if((StringMacText.length()>=12)&&((StringMacText.left(4)=="DD54")||(StringMacText.left(4)=="DD54")))
+    {
+      intCount++;
+      qDebug()<<intCount;
+      //qDebug()<<intBoxCount;
+      //qDebug()<<QString::number(intBoxCount, 10);
+      if(intCount==1) stringArrayMacName=QString::number(intBoxCount, 10)+"-"+ui->textEdit->toPlainText();
+      ui->label->setText( QString::number(intCount, 10));
+      qDebug()<<"stringArrayMacName"+stringArrayMacName;
+      if((StringMacText.indexOf("DD54")&&StringMacText.indexOf("dd54"))>=0)
       {
-          static int intCount=0;
-          intCount++;
-          ui->label->setText( QString::number(intCount, 10));
-          if(intCount>=20) intCount=0;
-          if((StringMacText.indexOf("DD54")&&StringMacText.indexOf("dd54"))>=0)
-          {
-              qDebug("success ....%d",StringMacText.indexOf("DD54"));
-          }
-          else
-          {
-              qDebug("error ....%d",StringMacText.indexOf("DD54"));
-          }
-          ui->plainTextEdit->appendPlainText(StringMacText);
-          ui->textEdit->clear();
+          //qDebug("success ....%d",StringMacText.indexOf("DD54"));
       }
+      else
+      {
+          //qDebug("error ....%d",StringMacText.indexOf("DD54"));
+      }
+      ui->plainTextEdit->appendPlainText(StringMacText+","+stringArrayMacName);
+      ui->textEdit->clear();
+    }
 }
-
+QFile file2("ts102_md5.txt");
 void MainWindow::on_plainTextEdit_textChanged()
 {
-    qDebug()<<"text:"+ui->plainTextEdit->toPlainText();
+    //qDebug()<<"text:"+ui->plainTextEdit->toPlainText();
 
     QByteArray mactext = ui->plainTextEdit->toPlainText().toLatin1();
-    qDebug()<<"Qbyte:"+mactext;
+    //qDebug()<<"Qbyte:"+mactext;
     int textLength=ui->plainTextEdit->toPlainText().trimmed().length();
-     qDebug("length: %d",textLength);
-    if(textLength>=240)
+    // qDebug("length: %d",textLength);
+    if(intCount==intBoxCount)
     {
+        intCount=0;
         QString macMd5=ui->plainTextEdit->toPlainText().left(12);
-        ui->textEdit->setText("20-"+macMd5);
-        QString stringQrcode="20-"+macMd5;
+        ui->textEdit->setText(QString::number(intBoxCount, 10)+"-"+macMd5);
+        QString stringQrcode=QString::number(intBoxCount, 10)+"-"+macMd5;
         QByteArray byteQrcode=stringQrcode.toLatin1();
         QRcode_Encode(byteQrcode);
 
         QString md5Name= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
         QFile file("ts102_"+md5Name+"_md5.txt");
+
         if(file.open(QIODevice::WriteOnly | QIODevice::Text))
         {
             QTextStream stream( &file );
-            stream << ui->plainTextEdit->toPlainText().left(240) << "\r\n";
+            stream << ui->plainTextEdit->toPlainText() << "\r\n";
             file.flush();
             file.close();
-            ui->plainTextEdit->clear();
+            if(file2.open(QIODevice::WriteOnly | QIODevice::Text|QIODevice::Append))
+            {
+                QTextStream stream2( &file2 );
+                stream2 << ui->plainTextEdit->toPlainText() << "\r\n";
+                file2.flush();
+                file2.close();
+                ui->plainTextEdit->clear();
+            }
         }
         else
         {
             log_output(tr("打开文件失败..."));
         }
     }
+}
 
-//##############################################################
-//    bool ok;
-//    int macValueInt=mactext.toInt(&ok,16);
-//    qDebug("int:%x",macValueInt);//<<"wei..."+macValueInt;
-//    quint16 crcChars = qChecksum(mactext, strlen(mactext));
-//    qDebug("crc1:%d",crcChars);
-//    ui->textEdit->setText(QString::number(crcChars, 10));
-//    int a[2]={0xdd5423,0xdd3454};
+void MainWindow::on_radioButton_2_clicked()
+{
+    intBoxCount=20;
+    intCount=0;
+    ui->plainTextEdit->clear();
+    ui->label->setText("请扫描20次");
+}
 
-//    int crcResult = crc16_compute(a,sizeof(a),NULL);
-//    qDebug()<<"crc"+crcResult;
-
+void MainWindow::on_radioButton_clicked()
+{
+    intBoxCount=50;
+    intCount=0;
+    ui->plainTextEdit->clear();
+    ui->label->setText("请扫描50次");
 }
