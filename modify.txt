@@ -51,15 +51,15 @@ void MainWindow::InitForm()
    QRcode_Encode(this->rencode_text);
    QRcode_Encode_2(this->rencode_text_2);
 
-   //è®¾ç½®è°ƒè¯•çª—å£çš„å­—ä½“å¤§å°
-   ui->plainTextEdit->setFont(QFont( "å®‹ä½“" , 10 ,  QFont::Normal) );
+   //ÉèÖÃµ÷ÊÔ´°¿ÚµÄ×ÖÌå´óĞ¡
+   ui->plainTextEdit->setFont(QFont( "ËÎÌå" , 10 ,  QFont::Normal) );
    QFile file("macAdress.txt");
    if(!file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
    {
         qDebug()<<"open file failure";
    }
 }
-////æ˜¾ç¤ºæ¡å½¢ç 
+////ÏÔÊ¾ÌõĞÎÂë
 //void MainWindow::QBarcode_ts102(QByteArray &text)
 //{
 //    QImage barcodeImage(ui->rencode_view->size(), QImage::Format_ARGB32);
@@ -76,7 +76,7 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 {
     QPen pen;
     QFont font;
-    int margin = 1;//è®¾ç½®å›¾åƒçš„é¡µè¾¹è·å¤§å°
+    int margin = 1;//ÉèÖÃÍ¼ÏñµÄÒ³±ß¾à´óĞ¡
     this->foreground = QColor("black");
     this->background = QColor("white");
 
@@ -86,11 +86,11 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
         QRect pRect = painter->viewport();
         painter->setViewport(pRect.x(),pRect.y(),VIEWSIZE_WITH,VIEWWIZE_HIGHT);
         painter->setWindow(pRect.x(),pRect.y(),WINDONWSIZE_WITH,WINDONWSIZE_HIGHT);
-        painter->translate(0, 0);//å…ˆå›åˆ°åæ ‡åŸç‚¹
+        painter->translate(0, 0);//ÏÈ»Øµ½×ø±êÔ­µã
         painter->save();
-        //ç”»äºŒç»´ç 
+        //»­¶şÎ¬Âë
         unsigned char *point = qrcode->data;
-        painter->translate(S_LEFT_MARGIN, S_UP_MARGIN);//åæ ‡å¹³ç§»ï¼Œå‘å³æ˜¯Xï¼Œå‘ä¸‹æ˜¯Y
+        painter->translate(S_LEFT_MARGIN, S_UP_MARGIN);//×ø±êÆ½ÒÆ£¬ÏòÓÒÊÇX£¬ÏòÏÂÊÇY
         painter->setPen(Qt::NoPen);
         painter->setBrush(this->background);
         painter->drawRect(0, 0, S_TWODIMENSION_SIZE, S_TWODIMENSION_SIZE);
@@ -105,21 +105,21 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
                 point ++;
             }
         }
-        //æ‰“å°æ–‡å­—
+        //´òÓ¡ÎÄ×Ö
         painter->restore();
         painter->translate(S_LEFT_MARGIN_TEXT, S_TWODIMENSION_SIZE+S_UP_MARGIN+S_PITURE_B_TEXT);
         pen.setColor(QColor("#ff00ff"));
         pen.setWidth(1);
         painter->setPen(pen);
         font.setBold(false);
-        font.setPointSize(S_TEXT_SIZE);//è®¾ç½®å­—ä½“å¤§å°
-        font.setFamily("æ–°å®‹ä½“");
+        font.setPointSize(S_TEXT_SIZE);//ÉèÖÃ×ÖÌå´óĞ¡
+        font.setFamily("ĞÂËÎÌå");
         painter->setFont(font);
         painter->drawText(0,0,text);
-        //ç»“æŸæ‰“å°
+        //½áÊø´òÓ¡
         painter->end();
         point = NULL;
-        //æŠŠmacåœ°å€ä¿å­˜åˆ°æ–‡ä»¶é‡Œé¢
+        //°ÑmacµØÖ·±£´æµ½ÎÄ¼şÀïÃæ
         QFile file("macAdress.txt");
         if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
         {
@@ -129,14 +129,14 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
         }
         else
         {
-            log_output(tr("æ‰“å¼€æ–‡ä»¶å¤±è´¥..."));
+            log_output(tr("´ò¿ªÎÄ¼şÊ§°Ü..."));
         }
         QRcode_free(qrcode);
     }
 }
 void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,QByteArray &text_2)
 {
-    int margin = D_MARGIN_VALUE;//è®¾ç½®å›¾åƒçš„é¡µè¾¹è·å¤§å°
+    int margin = D_MARGIN_VALUE;//ÉèÖÃÍ¼ÏñµÄÒ³±ß¾à´óĞ¡
     this->foreground = QColor("black");
     this->background = QColor("white");
     QPen pen;
@@ -150,13 +150,13 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
         QRect pRect = painter->viewport();
         painter->setViewport(pRect.x(),pRect.y(),VIEWSIZE_WITH,VIEWWIZE_HIGHT);
         painter->setWindow(pRect.x(),pRect.y(),WINDONWSIZE_WITH,WINDONWSIZE_HIGHT);
-        painter->translate(0,0);//ç§»åŠ¨åˆ°åŸç‚¹
-        painter->save();//ç¼“å­˜å½“å‰çš„åæ ‡çŠ¶æ€
+        painter->translate(0,0);//ÒÆ¶¯µ½Ô­µã
+        painter->save();//»º´æµ±Ç°µÄ×ø±ê×´Ì¬
         qDebug("printer.x %d printer.y %d",printer->pageRect().x(),printer->pageRect().y());
         qDebug("printer.w %d printer.h %d",printer->pageRect().width(),printer->pageRect().height());
-        //ç”»äºŒç»´ç 
+        //»­¶şÎ¬Âë
         unsigned char *point = qrcode->data;
-        painter->translate(D_LEFT_MARGIN,D_UP_MARGIN);//åæ ‡å¹³ç§»ï¼Œå‘å³æ˜¯Xï¼Œå‘ä¸‹æ˜¯Y
+        painter->translate(D_LEFT_MARGIN,D_UP_MARGIN);//×ø±êÆ½ÒÆ£¬ÏòÓÒÊÇX£¬ÏòÏÂÊÇY
         painter->setPen(Qt::NoPen);
         painter->setBrush(this->background);
         painter->drawRect(0, 0, D_TWODIMENSION_SIZE, D_TWODIMENSION_SIZE);
@@ -171,25 +171,25 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
                 point ++;
             }
         }
-        //æ‰“å°æ–‡å­—
-        painter->restore();//å›åˆ°saveçš„ä½ç½®
-        painter->save();//ç¼“å­˜å½“å‰çš„åæ ‡çŠ¶æ€
+        //´òÓ¡ÎÄ×Ö
+        painter->restore();//»Øµ½saveµÄÎ»ÖÃ
+        painter->save();//»º´æµ±Ç°µÄ×ø±ê×´Ì¬
         painter->translate(D_LEFT_MARGIN,D_TWODIMENSION_SIZE+D_UP_MARGIN+D_PITURE_B_TEXT);
         pen.setColor(QColor("#ff00ff"));
         pen.setWidth(1);
         painter->setPen(pen);
         font.setBold(false);
-        font.setPointSize(D_TEXT_SIZE);//è®¾ç½®å­—ä½“å¤§å°
-        font.setFamily("æ–°å®‹ä½“");
+        font.setPointSize(D_TEXT_SIZE);//ÉèÖÃ×ÖÌå´óĞ¡
+        font.setFamily("ĞÂËÎÌå");
         painter->setFont(font);
         painter->drawText(0,0,text);
 
         qDebug("printer.x %d printer.y %d",printer->pageRect().x(),printer->pageRect().y());
         qDebug("printer.w %d printer.h %d",printer->pageRect().width(),printer->pageRect().height());
-        //æ‰“å°äºŒç»´ç 
-        painter->restore();//å›åˆ°saveçš„ä½ç½®
-        painter->save();//ç¼“å­˜å½“å‰çš„åæ ‡çŠ¶æ€
-        painter->translate(D_LEFT_MARGIN+D_TWODIMENSION_SIZE+D_TWODIMENSION_INTERVAL,D_UP_MARGIN);//åæ ‡å¹³ç§»ï¼Œå‘å³æ˜¯Xï¼Œå‘ä¸‹æ˜¯Y
+        //´òÓ¡¶şÎ¬Âë
+        painter->restore();//»Øµ½saveµÄÎ»ÖÃ
+        painter->save();//»º´æµ±Ç°µÄ×ø±ê×´Ì¬
+        painter->translate(D_LEFT_MARGIN+D_TWODIMENSION_SIZE+D_TWODIMENSION_INTERVAL,D_UP_MARGIN);//×ø±êÆ½ÒÆ£¬ÏòÓÒÊÇX£¬ÏòÏÂÊÇY
         QRcode *qrcode2 = QRcode_encodeString(text_2.data(), 1, QR_ECLEVEL_L, QR_MODE_8, 1);
         if(NULL != qrcode2) {
             unsigned char *point = qrcode2->data;
@@ -208,22 +208,22 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
                 }
             }
         }
-        //æ‰“å°æ–‡å­—
-        painter->restore();//å›åˆ°saveçš„ä½ç½®
-        painter->save();//ç¼“å­˜å½“å‰çš„åæ ‡çŠ¶æ€
+        //´òÓ¡ÎÄ×Ö
+        painter->restore();//»Øµ½saveµÄÎ»ÖÃ
+        painter->save();//»º´æµ±Ç°µÄ×ø±ê×´Ì¬
         painter->translate(D_LEFT_MARGIN+D_TWODIMENSION_SIZE+D_TWODIMENSION_INTERVAL,D_TWODIMENSION_SIZE+D_UP_MARGIN+D_PITURE_B_TEXT);
         pen.setColor(QColor("#ff00ff"));
         pen.setWidth(1);
         painter->setPen(pen);
         font.setBold(false);
-        font.setPointSize(D_TEXT_SIZE);//è®¾ç½®å­—ä½“å¤§å°
-        font.setFamily("æ–°å®‹ä½“");
+        font.setPointSize(D_TEXT_SIZE);//ÉèÖÃ×ÖÌå´óĞ¡
+        font.setFamily("ĞÂËÎÌå");
         painter->setFont(font);
         painter->drawText(0,0,text_2);
-        //ç»“æŸæ‰“å°
+        //½áÊø´òÓ¡
         painter->end();
         point = NULL;
-        //æŠŠmacåœ°å€ä¿å­˜åˆ°æ–‡ä»¶é‡Œé¢
+        //°ÑmacµØÖ·±£´æµ½ÎÄ¼şÀïÃæ
         QFile file("macAdress.txt");
         if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
         {
@@ -234,12 +234,12 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
         }
         else
         {
-            log_output(tr("æ‰“å¼€æ–‡ä»¶å¤±è´¥..."));
+            log_output(tr("´ò¿ªÎÄ¼şÊ§°Ü..."));
         }
         QRcode_free(qrcode);
     }
 }
-//äºŒç»´ç æ˜¾ç¤º
+//¶şÎ¬ÂëÏÔÊ¾
 void MainWindow::QRcode_Encode(QByteArray &text)
 {
     int margin = D_MARGIN_VALUE;
@@ -312,8 +312,8 @@ void MainWindow::FrameParse(char c)
                     this->rencode_text = this->recv_arr;
                     if(rencode_text.isEmpty()==false)
                     {
-                    QRcode_Encode(this->rencode_text);//æ˜¾ç¤ºäºŒç»´ç 
-                    log_output(tr("è§£ææˆåŠŸ"));
+                    QRcode_Encode(this->rencode_text);//ÏÔÊ¾¶şÎ¬Âë
+                    log_output(tr("½âÎö³É¹¦"));
                     }
                 }
                 else if(dcount==1)
@@ -323,8 +323,8 @@ void MainWindow::FrameParse(char c)
                     this->rencode_text_2 = this->recv_arr;
                     if(rencode_text_2.isEmpty()==false)
                     {
-                    QRcode_Encode_2(this->rencode_text_2);//æ˜¾ç¤ºäºŒç»´ç 
-                    log_output(tr("è§£ææˆåŠŸ"));
+                    QRcode_Encode_2(this->rencode_text_2);//ÏÔÊ¾¶şÎ¬Âë
+                    log_output(tr("½âÎö³É¹¦"));
                     }
                 }
             }
@@ -334,8 +334,8 @@ void MainWindow::FrameParse(char c)
                 this->rencode_text = this->recv_arr;
                 if(rencode_text.isEmpty()==false)
                 {
-                QRcode_Encode(this->rencode_text);//æ˜¾ç¤ºäºŒç»´ç 
-                log_output(tr("è§£ææˆåŠŸ"));
+                QRcode_Encode(this->rencode_text);//ÏÔÊ¾¶şÎ¬Âë
+                log_output(tr("½âÎö³É¹¦"));
                 }
             }
             state = 0;
@@ -379,8 +379,8 @@ void MainWindow::log_output(QString info)
 
 
 
-//å‡½ æ•° åï¼šHexToAsc()
-//åŠŸèƒ½æè¿°ï¼šæŠŠ16è¿›åˆ¶è½¬æ¢ä¸ºASCII
+//º¯ Êı Ãû£ºHexToAsc()
+//¹¦ÄÜÃèÊö£º°Ñ16½øÖÆ×ª»»ÎªASCII
 char MainWindow::IntToStr(char aChar)
 {
     char ss;
@@ -409,8 +409,8 @@ char MainWindow::IntToStr(char aChar)
     printf("%s %c\n",__FUNCTION__,ss);
     return ss;
 }
-//å‡½ æ•° åï¼šStrToInt()
-//åŠŸèƒ½æè¿°ï¼šæŠŠå­—ç¬¦è½¬æ¢æˆå¯¹åº”çš„æ•°å­—ï¼Œæ¯”å¦‚aè½¬æ¢æˆ10
+//º¯ Êı Ãû£ºStrToInt()
+//¹¦ÄÜÃèÊö£º°Ñ×Ö·û×ª»»³É¶ÔÓ¦µÄÊı×Ö£¬±ÈÈça×ª»»³É10
 char MainWindow::StrToInt(char aChar)
 {
     char ss;
@@ -439,8 +439,8 @@ char MainWindow::StrToInt(char aChar)
     printf("%s %d\n",__FUNCTION__,ss);
     return ss;
 }
-//å‡½ æ•° åï¼šHexToAsc()
-//åŠŸèƒ½æè¿°ï¼šæŠŠ16è¿›åˆ¶è½¬æ¢ä¸ºASCII
+//º¯ Êı Ãû£ºHexToAsc()
+//¹¦ÄÜÃèÊö£º°Ñ16½øÖÆ×ª»»ÎªASCII
 char IntToStr(unsigned char aChar){
     char ss;
     switch(aChar)
@@ -490,10 +490,10 @@ void MainWindow::on_print_button_clicked()
 {
    QByteArray readCmdMac="DD54";
    static int pTwoFlag=0;
-   static int macValue=0x10000001;//åˆå§‹å€¼
+   static int macValue=0x10000001;//³õÊ¼Öµ
    QString sValue=ui->textEdit->toPlainText();
    qDebug()<<sValue;
-   //QByteArray iValue=sValue.toLatin1().toHex();//QString è½¬æˆQByteArray
+   //QByteArray iValue=sValue.toLatin1().toHex();//QString ×ª³ÉQByteArray
    //qDebug()<<iValue;
    //readCmdMac.append(iValue);
    bool ok;
@@ -502,33 +502,33 @@ void MainWindow::on_print_button_clicked()
    int imacCount;
 for(int imac=0;imac<imacCount;imac++)
 {
-    //ç¬¬ä¸€æ¬¡æ•°æ®##########################################
+    //µÚÒ»´ÎÊı¾İ##########################################
     readCmdMac="DD54";
     qDebug()<<QString::number(macValue,16).toUpper();
     readCmdMac.append(QString::number(macValue,16).toUpper().toLatin1());
     qDebug()<<readCmdMac;
     this->rencode_text=readCmdMac;
-    //åœ¨PCç•Œé¢æ˜¾ç¤ºäºŒç»´ç 
+    //ÔÚPC½çÃæÏÔÊ¾¶şÎ¬Âë
     QRcode_Encode(this->rencode_text);
     log_output(tr("-->1:")+readCmdMac);
-    ui->print_button->setText("å†æ¬¡è¯»å–ä¸€æ¬¡ï¼Œå¹¶æ‰“å°");
+    ui->print_button->setText("ÔÙ´Î¶ÁÈ¡Ò»´Î£¬²¢´òÓ¡");
     int imacStep;
     macValue+=imacStep;
-    //ç¬¬äºŒæ¬¡æ•°æ®##########################################
+    //µÚ¶ş´ÎÊı¾İ##########################################
     readCmdMac="DD54";
     readCmdMac.append(QString::number(macValue,16).toUpper().toLatin1());
     qDebug()<<readCmdMac;
     ui->rencode_lineEdit_2->setText(readCmdMac);
     this->rencode_text_2=readCmdMac;
-    //åœ¨PCç•Œé¢æ˜¾ç¤ºäºŒç»´ç 
+    //ÔÚPC½çÃæÏÔÊ¾¶şÎ¬Âë
     QRcode_Encode_2(this->rencode_text_2);
     log_output(tr("-->:")+readCmdMac);
-    ui->print_button->setText("æ‰“å°");
+    ui->print_button->setText("´òÓ¡");
     macValue+=imacStep;
-    //äºŒç»´ç æ‰“å°///////////////////////////////////////////////////
+    //¶şÎ¬Âë´òÓ¡///////////////////////////////////////////////////
     static long prinCount=0;
     QPrinter printer;
-    //è®¾ç½®çº¸å¼ å¤§å°
+    //ÉèÖÃÖ½ÕÅ´óĞ¡
     printer.setPageSize(QPagedPaintDevice::Custom);
     printer.setPaperSize(QSizeF(PAPER_WIDTH,PAPER_HIGHT),QPrinter::Millimeter);
 
@@ -537,7 +537,7 @@ for(int imac=0;imac<imacCount;imac++)
     QString printerName = printer.printerName();
     if(printerName.size()==0)
     {
-//        log_output("è¯·è¿æ¥æ‰“å°æœº!!!!!");
+//        log_output("ÇëÁ¬½Ó´òÓ¡»ú!!!!!");
         return;
     }
     QPrintDialog *dialog = new QPrintDialog(&printer);
@@ -547,7 +547,7 @@ for(int imac=0;imac<imacCount;imac++)
 
 }
 }
-//äºŒç»´ç æ˜¾ç¤º
+//¶şÎ¬ÂëÏÔÊ¾
 void MainWindow::QRcode_Encode_2(QByteArray &text)
 {
     int margin = D_MARGIN_VALUE;
@@ -634,7 +634,7 @@ void MainWindow::on_plainTextEdit_textChanged()
         }
         else
         {
-            log_output(tr("æ‰“å¼€æ–‡ä»¶å¤±è´¥..."));
+            log_output(tr("´ò¿ªÎÄ¼şÊ§°Ü..."));
         }
     }
 
