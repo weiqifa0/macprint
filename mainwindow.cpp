@@ -54,7 +54,7 @@ void MainWindow::InitForm()
 
    //设置调试窗口的字体大小
    ui->plainTextEdit->setFont(QFont( "宋体" , 10 ,  QFont::Normal) );
-
+   ui->textEdit->setFont(QFont( "微软雅黑" , 18 ,  QFont::DemiBold) );
 }
 void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 {
@@ -338,45 +338,6 @@ void MainWindow::log_output(QString info)
 
 void MainWindow::on_print_button_clicked()
 {
-   QByteArray readCmdMac="DD54";
-   static int pTwoFlag=0;
-   static int macValue=0x10000001;//初始值
-   QString sValue=ui->textEdit->toPlainText();
-   qDebug()<<sValue;
-   //QByteArray iValue=sValue.toLatin1().toHex();//QString 转成QByteArray
-   //qDebug()<<iValue;
-   //readCmdMac.append(iValue);
-   bool ok;
-   macValue=sValue.toLong(&ok,16);
-   //return;
-   int imacCount;
-for(int imac=0;imac<imacCount;imac++)
-{
-    //第一次数据##########################################
-    readCmdMac="DD54";
-    qDebug()<<QString::number(macValue,16).toUpper();
-    readCmdMac.append(QString::number(macValue,16).toUpper().toLatin1());
-    qDebug()<<readCmdMac;
-    this->rencode_text=readCmdMac;
-    //在PC界面显示二维码
-    QRcode_Encode(this->rencode_text);
-    log_output(tr("-->1:")+readCmdMac);
-    ui->print_button->setText("再次读取一次，并打印");
-    int imacStep;
-    macValue+=imacStep;
-    //第二次数据##########################################
-    readCmdMac="DD54";
-    readCmdMac.append(QString::number(macValue,16).toUpper().toLatin1());
-    qDebug()<<readCmdMac;
-    ui->rencode_lineEdit_2->setText(readCmdMac);
-    this->rencode_text_2=readCmdMac;
-    //在PC界面显示二维码
-    QRcode_Encode_2(this->rencode_text_2);
-    log_output(tr("-->:")+readCmdMac);
-    ui->print_button->setText("打印");
-    macValue+=imacStep;
-    //二维码打印///////////////////////////////////////////////////
-    static long prinCount=0;
     QPrinter printer;
     //设置纸张大小
     printer.setPageSize(QPagedPaintDevice::Custom);
@@ -387,15 +348,27 @@ for(int imac=0;imac<imacCount;imac++)
     QString printerName = printer.printerName();
     if(printerName.size()==0)
     {
-//        log_output("请连接打印机!!!!!");
+        //log_output("请连接打印机!!!!!");
+        qDebug()<<"please connect printer...";
         return;
     }
     QPrintDialog *dialog = new QPrintDialog(&printer);
     dialog->setWindowTitle("print Document");
     QPrintDialog dlg(&printer,this);
     QPainter painter;
+    if(this->rencode_text.length()<=0)
+    {
+        qDebug()<<"rencode_text is null...";
+        //this->rencode_text="20-DD5411300012";
+        ui->label->setText("请先扫描...");
+        return;
+    }
+    qDebug()<<"print start...";
+    QPcode(&printer,&painter,this->rencode_text);
+    ui->textEdit->setEnabled(true);
+    ui->plainTextEdit->setEnabled(true);
+    ui->label->setText("请继续扫描...");
 
-}
 }
 //二维码显示
 void MainWindow::QRcode_Encode_2(QByteArray &text)
@@ -445,25 +418,26 @@ void MainWindow::on_textEdit_textChanged()
       qDebug()<<"stringArrayMacName"+stringArrayMacName;
       if((StringMacText.indexOf("DD54")&&StringMacText.indexOf("dd54"))>=0)
       {
-          //qDebug("success ....%d",StringMacText.indexOf("DD54"));
+          qDebug("success ....%d",StringMacText.indexOf("DD54"));
       }
       else
       {
-          //qDebug("error ....%d",StringMacText.indexOf("DD54"));
+          qDebug("error ....%d",StringMacText.indexOf("DD54"));
       }
       ui->plainTextEdit->appendPlainText(StringMacText+","+stringArrayMacName);
       ui->textEdit->clear();
     }
 }
-QFile file2("ts102_md5.txt");
+QString md5Name01= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
+QFile file2("Allts102_"+md5Name01+"_md5.txt");
 void MainWindow::on_plainTextEdit_textChanged()
 {
     //qDebug()<<"text:"+ui->plainTextEdit->toPlainText();
 
     QByteArray mactext = ui->plainTextEdit->toPlainText().toLatin1();
-    //qDebug()<<"Qbyte:"+mactext;
+    qDebug()<<"Qbyte:"+mactext;
     int textLength=ui->plainTextEdit->toPlainText().trimmed().length();
-    // qDebug("length: %d",textLength);
+    qDebug("length: %d",textLength);
     if(intCount==intBoxCount)
     {
         intCount=0;
@@ -471,6 +445,7 @@ void MainWindow::on_plainTextEdit_textChanged()
         ui->textEdit->setText(QString::number(intBoxCount, 10)+"-"+macMd5);
         QString stringQrcode=QString::number(intBoxCount, 10)+"-"+macMd5;
         QByteArray byteQrcode=stringQrcode.toLatin1();
+        this->rencode_text = stringQrcode.toLatin1();
         QRcode_Encode(byteQrcode);
 
         QString md5Name= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
@@ -489,6 +464,9 @@ void MainWindow::on_plainTextEdit_textChanged()
                 file2.flush();
                 file2.close();
                 ui->plainTextEdit->clear();
+                ui->label->setText("请先打印...");
+                ui->textEdit->setEnabled(false);
+                ui->plainTextEdit->setEnabled(false);
             }
         }
         else
