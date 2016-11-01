@@ -409,7 +409,6 @@ QFile file2("Allts102_"+md5Name01+"_md5.txt");
 void MainWindow::on_plainTextEdit_textChanged()
 {
     //qDebug()<<"text:"+ui->plainTextEdit->toPlainText();
-
     QByteArray mactext = ui->plainTextEdit->toPlainText().toLatin1();
     qDebug()<<"Qbyte:"+mactext;
     int textLength=ui->plainTextEdit->toPlainText().trimmed().length();
@@ -418,7 +417,6 @@ void MainWindow::on_plainTextEdit_textChanged()
     {
         intCount=0;
         QString macMd5=ui->plainTextEdit->toPlainText().left(12);
-        //ui->lineEdit->setText(QString::number(intBoxCount, 10)+"-"+macMd5);
         QString stringQrcode=QString::number(intBoxCount, 10)+"-"+macMd5;
         QByteArray byteQrcode=stringQrcode.toLatin1();
         this->rencode_text = stringQrcode.toLatin1();
@@ -474,6 +472,14 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
     qDebug()<<"StringMacText:"+StringMacText;
     if((StringMacText.trimmed().length()>=12)&&((StringMacText.trimmed().left(4)=="DD54")||(StringMacText.trimmed().left(4)=="dd54")))
     {
+      QString stringMacText=ui->lineEdit->text();
+      QString stringAllMacText =ui->plainTextEdit->toPlainText();
+      if(stringAllMacText.contains(stringMacText))
+      {
+          ui->label->setText("重复录入");
+          ui->lineEdit->clear();
+          return;
+      }
       intCount++;
       qDebug()<<intCount;
       //qDebug()<<intBoxCount;
