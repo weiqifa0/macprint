@@ -53,8 +53,8 @@ void MainWindow::InitForm()
    QRcode_Encode_2(this->rencode_text_2);
 
    //设置调试窗口的字体大小
-   ui->plainTextEdit->setFont(QFont( "宋体" , 10 ,  QFont::Normal) );
-   ui->textEdit->setFont(QFont( "微软雅黑" , 18 ,  QFont::DemiBold) );
+   ui->plainTextEdit->setFont(QFont( "宋体" , 9,  QFont::Normal) );
+   //ui->textEdit->setFont(QFont( "微软雅黑" , 18 ,  QFont::Normal) );
 }
 void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 {
@@ -365,7 +365,7 @@ void MainWindow::on_print_button_clicked()
     }
     qDebug()<<"print start...";
     QPcode(&printer,&painter,this->rencode_text);
-    ui->textEdit->setEnabled(true);
+    ui->lineEdit->setEnabled(true);
     ui->plainTextEdit->setEnabled(true);
     ui->label->setText("请继续扫描...");
 
@@ -402,32 +402,8 @@ void MainWindow::QRcode_Encode_2(QByteArray &text)
         QRcode_free(qrcode);
     }
 }
-QString stringArrayMacName;
-void MainWindow::on_textEdit_textChanged()
-{
-    QString StringMacText=ui->textEdit->toPlainText();
-    qDebug()<<"StringMacText:"+StringMacText;
-    if((StringMacText.length()>=12)&&((StringMacText.left(4)=="DD54")||(StringMacText.left(4)=="DD54")))
-    {
-      intCount++;
-      qDebug()<<intCount;
-      //qDebug()<<intBoxCount;
-      //qDebug()<<QString::number(intBoxCount, 10);
-      if(intCount==1) stringArrayMacName=QString::number(intBoxCount, 10)+"-"+ui->textEdit->toPlainText();
-      ui->label->setText( QString::number(intCount, 10));
-      qDebug()<<"stringArrayMacName"+stringArrayMacName;
-      if((StringMacText.indexOf("DD54")&&StringMacText.indexOf("dd54"))>=0)
-      {
-          qDebug("success ....%d",StringMacText.indexOf("DD54"));
-      }
-      else
-      {
-          qDebug("error ....%d",StringMacText.indexOf("DD54"));
-      }
-      ui->plainTextEdit->appendPlainText(StringMacText+","+stringArrayMacName);
-      ui->textEdit->clear();
-    }
-}
+
+
 QString md5Name01= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
 QFile file2("Allts102_"+md5Name01+"_md5.txt");
 void MainWindow::on_plainTextEdit_textChanged()
@@ -442,7 +418,7 @@ void MainWindow::on_plainTextEdit_textChanged()
     {
         intCount=0;
         QString macMd5=ui->plainTextEdit->toPlainText().left(12);
-        ui->textEdit->setText(QString::number(intBoxCount, 10)+"-"+macMd5);
+        //ui->lineEdit->setText(QString::number(intBoxCount, 10)+"-"+macMd5);
         QString stringQrcode=QString::number(intBoxCount, 10)+"-"+macMd5;
         QByteArray byteQrcode=stringQrcode.toLatin1();
         this->rencode_text = stringQrcode.toLatin1();
@@ -465,7 +441,7 @@ void MainWindow::on_plainTextEdit_textChanged()
                 file2.close();
                 ui->plainTextEdit->clear();
                 ui->label->setText("请先打印...");
-                ui->textEdit->setEnabled(false);
+                ui->lineEdit->setEnabled(false);
                 ui->plainTextEdit->setEnabled(false);
             }
         }
@@ -490,4 +466,35 @@ void MainWindow::on_radioButton_clicked()
     intCount=0;
     ui->plainTextEdit->clear();
     ui->label->setText("请扫描50次");
+}
+QString stringArrayMacName;
+void MainWindow::on_lineEdit_textChanged(const QString &arg1)
+{
+    QString StringMacText=ui->lineEdit->text();
+    qDebug()<<"StringMacText:"+StringMacText;
+    if((StringMacText.trimmed().length()>=12)&&((StringMacText.trimmed().left(4)=="DD54")||(StringMacText.trimmed().left(4)=="dd54")))
+    {
+      intCount++;
+      qDebug()<<intCount;
+      //qDebug()<<intBoxCount;
+      //qDebug()<<QString::number(intBoxCount, 10);
+      if(intCount==1) stringArrayMacName=QString::number(intBoxCount, 10)+"-"+ui->lineEdit->text();
+      ui->label->setText( QString::number(intCount, 10));
+      qDebug()<<"stringArrayMacName"+stringArrayMacName;
+      if((StringMacText.indexOf("DD54")&&StringMacText.indexOf("dd54"))>=0)
+      {
+          qDebug("success ....%d",StringMacText.indexOf("DD54"));
+      }
+      else
+      {
+          qDebug("error ....%d",StringMacText.indexOf("DD54"));
+      }
+      ui->plainTextEdit->appendPlainText(StringMacText+","+stringArrayMacName);
+      ui->lineEdit->clear();
+    }
+    else if(StringMacText.trimmed().length()>=12)
+    {
+        ui->lineEdit->clear();
+        ui->label->setText("出错!!!");
+    }
 }

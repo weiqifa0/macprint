@@ -32,13 +32,15 @@ private slots:
 
     //void on_checkBox_clicked(bool checked);
 
-    void on_textEdit_textChanged();
+    //void on_textEdit_textChanged();
 
     void on_plainTextEdit_textChanged();
 
     void on_radioButton_2_clicked();
 
     void on_radioButton_clicked();
+
+    void on_lineEdit_textChanged(const QString &arg1);
 
 private:
     Ui::MainWindow *ui;
@@ -65,16 +67,16 @@ private:
     void log_output(QString info);
     void FrameParse(char c);
     QSerialPort *serialport;
-    #define PAPER_WIDTH 32
-    #define PAPER_HIGHT 15
+    #define PAPER_WIDTH 40
+    #define PAPER_HIGHT 30
     #define IMAGE_SIZE 350 //定义在上位机显示二维码大小
     /***************************************
      * 设置viewsize windonwsize
      * ************************************/
-    #define VIEWSIZE_WITH 32
-    #define VIEWWIZE_HIGHT 15
-    #define WINDONWSIZE_WITH 32
-    #define WINDONWSIZE_HIGHT 15
+    #define VIEWSIZE_WITH 40
+    #define VIEWWIZE_HIGHT 30
+    #define WINDONWSIZE_WITH 40
+    #define WINDONWSIZE_HIGHT 30
 
     /***************************************
      * 两张规格
@@ -96,17 +98,17 @@ private:
     #define S_MARGIN_VALUE 0
     #define S_DPI 25.4
     #define S_PARAMETER 3.775
-    #define S_UP_MARGIN 1.0*S_PARAMETER
-    #define S_LEFT_MARGIN 1.67*S_PARAMETER
-    #define S_LEFT_MARGIN_TEXT 1.67*S_PARAMETER+1.0 //文字的左边距
+    #define S_UP_MARGIN 4.0*S_PARAMETER
+    #define S_LEFT_MARGIN 10.0*S_PARAMETER   //图片的左边距
+    #define S_LEFT_MARGIN_TEXT 10.0*S_PARAMETER //文字的左边距
     #define S_TEXT_TWODIMENSION 1.7*S_PARAMETER
-    #define S_TWODIMENSION_SIZE 10*S_PARAMETER
-    #define S_PITURE_B_TEXT 1.7*D_PARAMETER //二维码和文字的距离
-    #define S_TEXT_SIZE 4 //字体大小
+    #define S_TWODIMENSION_SIZE 20*S_PARAMETER //定义二维码大小 20MM
+    #define S_PITURE_B_TEXT 3.0*D_PARAMETER //二维码和文字的距离
+    #define S_TEXT_SIZE 7 //字体大小
 
     #define READ_MAC_CMD "nrfjprog.exe --memrd 0x100000a3 --n 7"
     #define RESET_CMD "nrfjprog.exe -f NRF52 --reset"
-    #define EXE_NAME "发货打包扫码打印工具V1.0"
+    #define EXE_NAME "发货打包扫码打印工具V1.1"
     #define CMD_OFFSIZE 4
 };
 
