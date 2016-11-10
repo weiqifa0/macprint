@@ -12,6 +12,7 @@
 #include <QDateTime>
 #include <QProcess>
 #include <QString>
+#include <QCryptographicHash>
 
 int intCount=0;
 int intBoxCount=20;
@@ -104,17 +105,17 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
         painter->end();
         point = NULL;
         //把mac地址保存到文件里面
-        QFile file("macAdress.txt");
-        if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
-        {
-            QTextStream stream( &file );
-            stream << text << "\r\n";
-            file.close();
-        }
-        else
-        {
-            log_output(tr("打开文件失败..."));
-        }
+//        QFile file("macAdress.txt");
+//        if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
+//        {
+//            QTextStream stream( &file );
+//            stream << text << "\r\n";
+//            file.close();
+//        }
+//        else
+//        {
+//            log_output(tr("打开文件失败..."));
+//        }
         QRcode_free(qrcode);
     }
 }
@@ -208,18 +209,18 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
         painter->end();
         point = NULL;
         //把mac地址保存到文件里面
-        QFile file("macAdress.txt");
-        if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
-        {
-            QTextStream stream( &file );
-            stream << text << "\r\n";
-            stream << text_2 << "\r\n";
-            file.close();
-        }
-        else
-        {
-            log_output(tr("打开文件失败..."));
-        }
+//        QFile file("macAdress.txt");
+//        if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
+//        {
+//            QTextStream stream( &file );
+//            stream << text << "\r\n";
+//            stream << text_2 << "\r\n";
+//            file.close();
+//        }
+//        else
+//        {
+//            log_output(tr("打开文件失败..."));
+//        }
         QRcode_free(qrcode);
     }
 }
@@ -422,15 +423,15 @@ void MainWindow::on_plainTextEdit_textChanged()
         this->rencode_text = stringQrcode.toLatin1();
         QRcode_Encode(byteQrcode);
 
-        QString md5Name= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
-        QFile file("ts102_"+md5Name+"_md5.txt");
+//        QString md5Name= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
+//        QFile file("ts102_"+md5Name+"_md5.txt");
 
-        if(file.open(QIODevice::WriteOnly | QIODevice::Text))
-        {
-            QTextStream stream( &file );
-            stream << ui->plainTextEdit->toPlainText() << "\r\n";
-            file.flush();
-            file.close();
+//        if(file.open(QIODevice::WriteOnly | QIODevice::Text))
+//        {
+//            QTextStream stream( &file );
+//            stream << ui->plainTextEdit->toPlainText() << "\r\n";
+//            file.flush();
+//            file.close();
             if(file2.open(QIODevice::WriteOnly | QIODevice::Text|QIODevice::Append))
             {
                 QTextStream stream2( &file2 );
@@ -442,11 +443,11 @@ void MainWindow::on_plainTextEdit_textChanged()
                 ui->lineEdit->setEnabled(false);
                 ui->plainTextEdit->setEnabled(false);
             }
-        }
-        else
-        {
-            log_output(tr("打开文件失败..."));
-        }
+//        }
+//        else
+//        {
+//            log_output(tr("打开文件失败..."));
+//        }
     }
 }
 
@@ -470,7 +471,7 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
     QString StringMacText=ui->lineEdit->text();
     qDebug()<<"StringMacText:"+StringMacText;
-    if((StringMacText.trimmed().length()>=12)&&((StringMacText.trimmed().left(4)=="DD54")||(StringMacText.trimmed().left(4)=="dd54")))
+    if((StringMacText.trimmed().length()>=PD_MAC_LENGTH)&&((StringMacText.trimmed().left(4)=="DD54")||(StringMacText.trimmed().left(4)=="dd54")))
     {
       QString stringMacText=ui->lineEdit->text();
       QString stringAllMacText =ui->plainTextEdit->toPlainText();
@@ -484,7 +485,16 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
       qDebug()<<intCount;
       //qDebug()<<intBoxCount;
       //qDebug()<<QString::number(intBoxCount, 10);
-      if(intCount==1) stringArrayMacName=QString::number(intBoxCount, 10)+"-"+ui->lineEdit->text();
+      if(intCount==1)
+      {//唯一标识码
+          QString md5;
+          QString pwd=ui->lineEdit->text();
+          QByteArray bb;
+          bb = QCryptographicHash::hash(pwd.toLatin1(),QCryptographicHash::Md5);
+          md5.append(bb.toHex());
+          stringArrayMacName=(QString::number(intBoxCount, 10)+"-"+md5).toUpper();//toUpper()
+          qDebug()<<stringArrayMacName;
+      }
       ui->label->setText( QString::number(intCount, 10));
       qDebug()<<"stringArrayMacName"+stringArrayMacName;
       if((StringMacText.indexOf("DD54")&&StringMacText.indexOf("dd54"))>=0)
@@ -498,7 +508,7 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
       ui->plainTextEdit->appendPlainText(StringMacText+","+stringArrayMacName);
       ui->lineEdit->clear();
     }
-    else if(StringMacText.trimmed().length()>=12)
+    else if(StringMacText.trimmed().length()>=PD_MAC_LENGTH)
     {
         ui->lineEdit->clear();
         ui->label->setText("出错!!!");

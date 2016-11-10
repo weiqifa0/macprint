@@ -106,8 +106,11 @@ public:
         gridLayout->setContentsMargins(5, 16, 5, 5);
         groupBox_2 = new QGroupBox(groupBox_4);
         groupBox_2->setObjectName(QStringLiteral("groupBox_2"));
-        sizePolicy.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
-        groupBox_2->setSizePolicy(sizePolicy);
+        QSizePolicy sizePolicy3(QSizePolicy::Expanding, QSizePolicy::Minimum);
+        sizePolicy3.setHorizontalStretch(0);
+        sizePolicy3.setVerticalStretch(0);
+        sizePolicy3.setHeightForWidth(groupBox_2->sizePolicy().hasHeightForWidth());
+        groupBox_2->setSizePolicy(sizePolicy3);
         horizontalLayout_3 = new QHBoxLayout(groupBox_2);
         horizontalLayout_3->setObjectName(QStringLiteral("horizontalLayout_3"));
         radioButton_2 = new QRadioButton(groupBox_2);
@@ -128,7 +131,7 @@ public:
         lineEdit->setObjectName(QStringLiteral("lineEdit"));
         QFont font;
         font.setFamily(QString::fromUtf8("\345\276\256\350\275\257\351\233\205\351\273\221"));
-        font.setPointSize(16);
+        font.setPointSize(14);
         font.setBold(true);
         font.setWeight(75);
         lineEdit->setFont(font);

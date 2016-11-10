@@ -8,7 +8,7 @@ QT       += core gui serialport
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 qtHaveModule(printsupport): QT += printsupport
-TARGET = ts102
+TARGET = macprintV1.3
 TEMPLATE = app
 DEFINES += ZINT_VERSION=\\\"2.4.4\\\"
 DEFINES += NO_PNG

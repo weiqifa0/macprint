@@ -67,6 +67,9 @@ private:
     void log_output(QString info);
     void FrameParse(char c);
     QSerialPort *serialport;
+    //#############################################
+    #define PD_MAC_LENGTH 16
+
     #define PAPER_WIDTH 40
     #define PAPER_HIGHT 30
     #define IMAGE_SIZE 350 //定义在上位机显示二维码大小
@@ -108,7 +111,7 @@ private:
 
     #define READ_MAC_CMD "nrfjprog.exe --memrd 0x100000a3 --n 7"
     #define RESET_CMD "nrfjprog.exe -f NRF52 --reset"
-    #define EXE_NAME "发货打包扫码打印工具V1.2"
+    #define EXE_NAME "发货打包扫码打印工具V1.3"
     #define CMD_OFFSIZE 4
 };
 
