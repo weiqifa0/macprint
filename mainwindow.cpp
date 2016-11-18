@@ -404,7 +404,7 @@ void MainWindow::QRcode_Encode_2(QByteArray &text)
     }
 }
 
-
+QString stringArrayMacName;
 QString md5Name01= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
 QFile file2("Allts102_"+md5Name01+"_md5.txt");
 void MainWindow::on_plainTextEdit_textChanged()
@@ -417,8 +417,8 @@ void MainWindow::on_plainTextEdit_textChanged()
     if(intCount==intBoxCount)
     {
         intCount=0;
-        QString macMd5=ui->plainTextEdit->toPlainText().left(12);
-        QString stringQrcode=QString::number(intBoxCount, 10)+"-"+macMd5;
+        //QString macMd5=stringArrayMacName;//ui->plainTextEdit->toPlainText().left(12);
+        QString stringQrcode=stringArrayMacName;//QString::number(intBoxCount, 10)+"-"+macMd5;
         QByteArray byteQrcode=stringQrcode.toLatin1();
         this->rencode_text = stringQrcode.toLatin1();
         QRcode_Encode(byteQrcode);
@@ -466,7 +466,7 @@ void MainWindow::on_radioButton_clicked()
     ui->plainTextEdit->clear();
     ui->label->setText("请扫描50次");
 }
-QString stringArrayMacName;
+
 void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
     QString StringMacText=ui->lineEdit->text();

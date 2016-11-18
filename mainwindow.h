@@ -103,11 +103,11 @@ private:
     #define S_PARAMETER 3.775
     #define S_UP_MARGIN 4.0*S_PARAMETER
     #define S_LEFT_MARGIN 10.0*S_PARAMETER   //图片的左边距
-    #define S_LEFT_MARGIN_TEXT 10.0*S_PARAMETER //文字的左边距
+    #define S_LEFT_MARGIN_TEXT 1.5*S_PARAMETER //文字的左边距
     #define S_TEXT_TWODIMENSION 1.7*S_PARAMETER
     #define S_TWODIMENSION_SIZE 20*S_PARAMETER //定义二维码大小 20MM
     #define S_PITURE_B_TEXT 3.0*D_PARAMETER //二维码和文字的距离
-    #define S_TEXT_SIZE 7 //字体大小
+    #define S_TEXT_SIZE 5 //字体大小
 
     #define READ_MAC_CMD "nrfjprog.exe --memrd 0x100000a3 --n 7"
     #define RESET_CMD "nrfjprog.exe -f NRF52 --reset"
