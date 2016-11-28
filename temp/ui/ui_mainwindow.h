@@ -48,6 +48,9 @@ public:
     QLineEdit *lineEdit;
     QLabel *label;
     QPlainTextEdit *plainTextEdit;
+    QGroupBox *groupBox_5;
+    QGridLayout *gridLayout_3;
+    QLabel *labelcolour;
     QGroupBox *groupBox;
     QVBoxLayout *verticalLayout_5;
     QHBoxLayout *horizontalLayout;
@@ -60,7 +63,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QStringLiteral("MainWindow"));
-        MainWindow->resize(762, 499);
+        MainWindow->resize(1151, 586);
         QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -161,6 +164,7 @@ public:
         font2.setFamily(QString::fromUtf8("\345\256\213\344\275\223"));
         font2.setPointSize(9);
         plainTextEdit->setFont(font2);
+        plainTextEdit->setReadOnly(false);
 
         gridLayout->addWidget(plainTextEdit, 5, 1, 1, 2);
 
@@ -169,6 +173,21 @@ public:
 
 
         horizontalLayout_5->addWidget(widget);
+
+        groupBox_5 = new QGroupBox(groupBox_3);
+        groupBox_5->setObjectName(QStringLiteral("groupBox_5"));
+        gridLayout_3 = new QGridLayout(groupBox_5);
+        gridLayout_3->setObjectName(QStringLiteral("gridLayout_3"));
+        labelcolour = new QLabel(groupBox_5);
+        labelcolour->setObjectName(QStringLiteral("labelcolour"));
+        sizePolicy1.setHeightForWidth(labelcolour->sizePolicy().hasHeightForWidth());
+        labelcolour->setSizePolicy(sizePolicy1);
+        labelcolour->setLayoutDirection(Qt::LeftToRight);
+
+        gridLayout_3->addWidget(labelcolour, 0, 0, 1, 1);
+
+
+        horizontalLayout_5->addWidget(groupBox_5, 0, Qt::AlignHCenter);
 
         groupBox = new QGroupBox(groupBox_3);
         groupBox->setObjectName(QStringLiteral("groupBox"));
@@ -233,6 +252,8 @@ public:
         radioButton_2->setText(QApplication::translate("MainWindow", "20\344\270\252\344\270\200\347\256\261", 0));
         radioButton->setText(QApplication::translate("MainWindow", "50\344\270\252\344\270\200\347\256\261", 0));
         label->setText(QApplication::translate("MainWindow", "\350\257\267\346\211\253\346\217\21720\346\254\241", 0));
+        groupBox_5->setTitle(QApplication::translate("MainWindow", "\350\257\267\346\263\250\346\204\217\346\230\276\347\244\272\347\232\204\350\256\276\345\244\207\351\242\234\350\211\262\346\230\257\345\220\246\345\214\271\351\205\215", 0));
+        labelcolour->setText(QApplication::translate("MainWindow", "TextLabel", 0));
         groupBox->setTitle(QApplication::translate("MainWindow", "\344\272\214\347\273\264\347\240\201\346\230\276\347\244\272", 0));
         rencode_view->setText(QApplication::translate("MainWindow", "Image1", 0));
         print_button->setText(QApplication::translate("MainWindow", "\346\211\223\345\215\260", 0));

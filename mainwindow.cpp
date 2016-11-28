@@ -12,6 +12,7 @@
 #include <QDateTime>
 #include <QProcess>
 #include <QString>
+#include <QMessageBox>
 #include <QCryptographicHash>
 
 int intCount=0;
@@ -56,6 +57,8 @@ void MainWindow::InitForm()
    //设置调试窗口的字体大小
    ui->plainTextEdit->setFont(QFont( "宋体" , 9,  QFont::Normal) );
    //ui->textEdit->setFont(QFont( "微软雅黑" , 18 ,  QFont::Normal) );
+   ui->labelcolour->setVisible(false);
+   ui->groupBox_5->setVisible(false);//
 }
 void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
 {
@@ -104,18 +107,6 @@ void MainWindow::QPcode( QPrinter *printer,QPainter *painter,QByteArray &text)
         //结束打印
         painter->end();
         point = NULL;
-        //把mac地址保存到文件里面
-//        QFile file("macAdress.txt");
-//        if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
-//        {
-//            QTextStream stream( &file );
-//            stream << text << "\r\n";
-//            file.close();
-//        }
-//        else
-//        {
-//            log_output(tr("打开文件失败..."));
-//        }
         QRcode_free(qrcode);
     }
 }
@@ -209,18 +200,7 @@ void MainWindow::QPcode_2( QPrinter *printer,QPainter *painter,QByteArray &text,
         painter->end();
         point = NULL;
         //把mac地址保存到文件里面
-//        QFile file("macAdress.txt");
-//        if(file.open(QIODevice::WriteOnly|QIODevice::Append|QIODevice::Text))
-//        {
-//            QTextStream stream( &file );
-//            stream << text << "\r\n";
-//            stream << text_2 << "\r\n";
-//            file.close();
-//        }
-//        else
-//        {
-//            log_output(tr("打开文件失败..."));
-//        }
+
         QRcode_free(qrcode);
     }
 }
@@ -409,7 +389,6 @@ QString md5Name01= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
 QFile file2("Allts102_"+md5Name01+"_md5.txt");
 void MainWindow::on_plainTextEdit_textChanged()
 {
-    //qDebug()<<"text:"+ui->plainTextEdit->toPlainText();
     QByteArray mactext = ui->plainTextEdit->toPlainText().toLatin1();
     qDebug()<<"Qbyte:"+mactext;
     int textLength=ui->plainTextEdit->toPlainText().trimmed().length();
@@ -417,37 +396,21 @@ void MainWindow::on_plainTextEdit_textChanged()
     if(intCount==intBoxCount)
     {
         intCount=0;
-        //QString macMd5=stringArrayMacName;//ui->plainTextEdit->toPlainText().left(12);
         QString stringQrcode=stringArrayMacName;//QString::number(intBoxCount, 10)+"-"+macMd5;
         QByteArray byteQrcode=stringQrcode.toLatin1();
         this->rencode_text = stringQrcode.toLatin1();
         QRcode_Encode(byteQrcode);
-
-//        QString md5Name= QDateTime::currentDateTime ().toString ("yyyyMMddHHmmss");
-//        QFile file("ts102_"+md5Name+"_md5.txt");
-
-//        if(file.open(QIODevice::WriteOnly | QIODevice::Text))
-//        {
-//            QTextStream stream( &file );
-//            stream << ui->plainTextEdit->toPlainText() << "\r\n";
-//            file.flush();
-//            file.close();
-            if(file2.open(QIODevice::WriteOnly | QIODevice::Text|QIODevice::Append))
-            {
-                QTextStream stream2( &file2 );
-                stream2 << ui->plainTextEdit->toPlainText() << "\r\n";
-                file2.flush();
-                file2.close();
-                ui->plainTextEdit->clear();
-                ui->label->setText("请先打印...");
-                ui->lineEdit->setEnabled(false);
-                ui->plainTextEdit->setEnabled(false);
-            }
-//        }
-//        else
-//        {
-//            log_output(tr("打开文件失败..."));
-//        }
+        if(file2.open(QIODevice::WriteOnly | QIODevice::Text|QIODevice::Append))
+        {
+            QTextStream stream2( &file2 );
+            stream2 << ui->plainTextEdit->toPlainText() << "\r\n";
+            file2.flush();
+            file2.close();
+            ui->plainTextEdit->clear();
+            ui->label->setText("请先打印...");
+            ui->lineEdit->setEnabled(false);
+            ui->plainTextEdit->setEnabled(false);
+        }
     }
 }
 
@@ -467,6 +430,7 @@ void MainWindow::on_radioButton_clicked()
     ui->label->setText("请扫描50次");
 }
 
+QString stringClour;
 void MainWindow::on_lineEdit_textChanged(const QString &arg1)
 {
     QString StringMacText=ui->lineEdit->text();
@@ -481,15 +445,61 @@ void MainWindow::on_lineEdit_textChanged(const QString &arg1)
           ui->lineEdit->clear();
           return;
       }
+      if(intCount>1)
+      {
+          {
+              if(ui->lineEdit->text().mid(C_MAC_STRING,1)!=stringClour)
+              {
+                  QPalette pa;
+                  pa.setColor(QPalette::WindowText,Qt::red);
+                  ui->labelcolour->setPalette(pa);
+                  ui->labelcolour->setText("这个设备和这个箱子里的设备颜色不同!!!");
+                  QMessageBox::critical(NULL, "出错", "这个设备和这个箱子里的设备颜色不同!!!", QMessageBox::Yes, QMessageBox::Yes);
+                  ui->lineEdit->clear();
+                  return;
+              }
+          }
+      }
+      //提示颜色
+      if(ui->lineEdit->text().mid(C_MAC_STRING,1)=="3")
+      {
+          ui->labelcolour->setPixmap(QPixmap("image\\blue1.png"));
+          ui->labelcolour->setVisible(true);
+          ui->groupBox_5->setVisible(true);//
+          ui->plainTextEdit->appendPlainText("###################[  蓝色  ]########################");
+      }
+      else if(ui->lineEdit->text().mid(C_MAC_STRING,1)=="1")
+      {
+          ui->labelcolour->setPixmap(QPixmap("image\\pink1.png"));
+          ui->labelcolour->setVisible(true);
+          ui->groupBox_5->setVisible(true);//
+          ui->plainTextEdit->appendPlainText("###################[  粉色  ]########################");
+      }
+      else if(ui->lineEdit->text().mid(C_MAC_STRING,1)=="2")
+      {
+          ui->labelcolour->setPixmap(QPixmap("image\\yellow1.png"));
+          ui->labelcolour->setVisible(true);
+          ui->groupBox_5->setVisible(true);//
+          ui->plainTextEdit->appendPlainText("###################[  黄色  ]########################");
+      }
+      else
+      {
+          QPalette pa;
+          pa.setColor(QPalette::WindowText,Qt::red);
+          ui->labelcolour->setPalette(pa);
+          ui->labelcolour->setText("不识别该颜色");
+          ui->plainTextEdit->appendPlainText("###################[  不识别该颜色  ]########################");
+          return;
+      }
+
       intCount++;
       qDebug()<<intCount;
-      //qDebug()<<intBoxCount;
-      //qDebug()<<QString::number(intBoxCount, 10);
       if(intCount==1)
       {//唯一标识码
           QString md5;
           QString pwd=ui->lineEdit->text();
           QByteArray bb;
+          stringClour=ui->lineEdit->text().mid(C_MAC_STRING,1);//保存颜色值
           bb = QCryptographicHash::hash(pwd.toLatin1(),QCryptographicHash::Md5);
           md5.append(bb.toHex());
           stringArrayMacName=(QString::number(intBoxCount, 10)+"-"+md5).toUpper();//toUpper()

@@ -111,8 +111,11 @@ private:
 
     #define READ_MAC_CMD "nrfjprog.exe --memrd 0x100000a3 --n 7"
     #define RESET_CMD "nrfjprog.exe -f NRF52 --reset"
-    #define EXE_NAME "发货打包扫码打印工具V1.3"
+    #define EXE_NAME "发货打包扫码打印工具V1.6"
     #define CMD_OFFSIZE 4
+
+    //长度定义
+    #define C_MAC_STRING 6
 };
 
 #endif // MAINWINDOW_H
